@@ -1,4 +1,4 @@
-//2.4.1 -2.4.2
+//2.4.1 -2.4.2 -2.4.2b -2.4.2c
 //Modules
 const mongoose = require('mongoose');
 const Dishes = require('./models/dishes');
@@ -16,10 +16,24 @@ connect.then((db) => {
     .then((dish) => {
         console.log(dish);
         //Find
-        return Dishes.find({});
+        return Dishes.findByIdAndUpdate(dish._id, {
+            $set: { description: 'Updated test'}
+        },{
+            new: true
+        })
+        .exec(); 
     })
-    .then((dishes) => {
-        console.log(dishes);
+    .then((dish) => {
+        console.log(dish);
+        dish.comments.push({
+            rating: 5,
+            comment: 'I\'m getting a sinking feeling!',
+            author: 'Leonardo di Carpaccio'
+        });
+        return dish.save();
+    })
+    .then((dish) => {
+        console.log(dish);
         //Remove
         return Dishes.remove({});
     })
